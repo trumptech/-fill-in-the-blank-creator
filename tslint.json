@@ -1,0 +1,15 @@
+﻿{
+  "defaultSeverity": "error",
+  "extends": [
+      "@ephox/tslint-rules/tslint.json"
+  ],
+  "jsRules": {},
+  "rules": {
+      "quotemark": [
+          true,
+          "single",
+          "avoid-escape"
+      ]
+  },
+  "rulesDirectory": []
+}
