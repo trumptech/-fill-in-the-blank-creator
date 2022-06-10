@@ -79,11 +79,11 @@ module.exports = (grunt) => {
         },
         // scratchPluginMinPath is used twice on purpose, all outputs will be minified for premium plugins
         files: {
-          'dist/fill-in-the-blank-creator/plugin.js': [
+          'dist/tinymce-fill-in-the-blank-plugin/plugin.js': [
             'src/text/license-header.js',
             scratchPluginMinPath
           ],
-          'dist/fill-in-the-blank-creator/plugin.min.js': [
+          'dist/tinymce-fill-in-the-blank-plugin/plugin.min.js': [
             'src/text/license-header.js',
             scratchPluginMinPath
           ]
@@ -94,7 +94,7 @@ module.exports = (grunt) => {
     copy: {
       css: {
         files: [
-          { src: ['CHANGELOG.txt', 'LICENSE.txt'], dest: 'dist/fill-in-the-blank-creator', expand: true }
+          { src: ['CHANGELOG.txt', 'LICENSE.txt'], dest: 'dist/tinymce-fill-in-the-blank-plugin', expand: true }
         ]
       }
     },
@@ -148,7 +148,7 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('@ephox/swag');
 
   grunt.registerTask('version', 'Creates a version file', () => {
-    grunt.file.write('dist/fill-in-the-blank-creator/version.txt', BUILD_VERSION);
+    grunt.file.write('dist/tinymce-fill-in-the-blank-plugin/version.txt', BUILD_VERSION);
   });
 
   grunt.registerTask('default', [

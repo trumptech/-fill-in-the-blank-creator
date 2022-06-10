@@ -7,8 +7,8 @@ Plugin();
 
 tinymce.init({
   selector: 'textarea.tinymce',
-  plugins: 'code fill-in-the-blank-creator',
-  toolbar: 'fill-in-the-blank-creator',
+  plugins: 'code fill-in-the-blank',
+  toolbar: 'fill-in-the-blank',
   // fill_in_the_blank_callback: (id, content) => {
   // }
 });
