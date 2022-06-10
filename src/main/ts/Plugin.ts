@@ -1,5 +1,5 @@
 import { Editor, TinyMCE } from 'tinymce';
-const UUIDClass = require('uuidjs');
+// const UUIDClass = require('uuidjs');
 // import { v4 as uuid } from 'uuid';
 
 declare const tinymce: TinyMCE;
@@ -14,7 +14,8 @@ const setup = (editor: Editor, url: string): void => {
   editor.ui.registry.addButton('fill-in-the-blank-creator', {
     text: 'fill-in-the-blank-creator button',
     onAction: () => {
-      const key = UUIDClass.genV4().toString();
+      // const key = UUIDClass.genV4().toString();
+      const key = Math.random();
       // const key = uuid();
       const blankLetter = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
       let blankUnderline = '';
