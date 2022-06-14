@@ -12,12 +12,12 @@ interface IAnswerData {
 
 function getEditorSettings(editor): EditorSettings {
   // equation_editor_config
-  let editorSettings = editor.settings.equation_editor_config;
+  let editorSettings = editor.settings.answer_editor_config;
 
   if (typeof editorSettings === 'undefined') {
     editorSettings = {};
   } else if (typeof editorSettings !== 'object') {
-    throw new Error("'equation_editor_config' property must be an object");
+    throw new Error("'answer_editor_config' property must be an object");
   }
 
   // url
@@ -25,7 +25,7 @@ function getEditorSettings(editor): EditorSettings {
     editorSettings.url = 'answer_editor/index.html';
   } else if (typeof editorSettings.url !== 'string') {
     throw new Error(
-      "'url' property must be a string in equation_editor_config"
+      "'url' property must be a string in answer_editor_config"
     );
   }
 
@@ -34,16 +34,16 @@ function getEditorSettings(editor): EditorSettings {
     editorSettings.origin = document.location.origin;
   } else if (typeof editorSettings.origin !== 'string') {
     throw new Error(
-      "'origin' property must be a string in equation_editor_config"
+      "'origin' property must be a string in answer_editor_config"
     );
   }
 
   // title
   if (typeof editorSettings.title === 'undefined') {
-    editorSettings.title = 'Equation Editor';
+    editorSettings.title = 'Answer Editor';
   } else if (typeof editorSettings.title !== 'string') {
     throw new Error(
-      "'title' property must be a string in equation_editor_config"
+      "'title' property must be a string in answer_editor_config"
     );
   }
 
@@ -52,7 +52,7 @@ function getEditorSettings(editor): EditorSettings {
     editorSettings.space_after_content = '&nbsp;';
   } else if (typeof editorSettings.space_after_content !== 'string') {
     throw new Error(
-      "'space_after_content' property must be a string in equation_editor_config"
+      "'space_after_content' property must be a string in answer_editor_config"
     );
   }
 
@@ -61,7 +61,7 @@ function getEditorSettings(editor): EditorSettings {
     editorSettings.btn_cancel_text = 'Cancel';
   } else if (typeof editorSettings.btn_cancel_text !== 'string') {
     throw new Error(
-      "'btn_cancel_text' property must be a string in equation_editor_config"
+      "'btn_cancel_text' property must be a string in answer_editor_config"
     );
   }
 
@@ -70,7 +70,7 @@ function getEditorSettings(editor): EditorSettings {
     editorSettings.btn_ok_text = 'Insert';
   } else if (typeof editorSettings.btn_ok_text !== 'string') {
     throw new Error(
-      "'btn_ok_text' property must be a string in equation_editor_config"
+      "'btn_ok_text' property must be a string in answer_editor_config"
     );
   }
 
