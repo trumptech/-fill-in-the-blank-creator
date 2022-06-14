@@ -94,7 +94,8 @@ module.exports = (grunt) => {
     copy: {
       css: {
         files: [
-          { src: ['CHANGELOG.txt', 'LICENSE.txt'], dest: 'dist/tinymce-fill-in-the-blank-plugin', expand: true }
+          { src: ['CHANGELOG.txt', 'LICENSE.txt'], dest: 'dist/tinymce-fill-in-the-blank-plugin', expand: true },
+          { cwd: 'src/demo/html/answer_editor', src: ['**'], dest: 'dist/tinymce-fill-in-the-blank-plugin/answer_editor', expand: true, filter: 'isFile' },
         ]
       }
     },
@@ -105,7 +106,7 @@ module.exports = (grunt) => {
         watch: true
       },
       dev: {
-        entry: tsDemoSourceFile,
+        entry: [tsDemoSourceFile],
         devtool: 'source-map',
 
         resolve: {
