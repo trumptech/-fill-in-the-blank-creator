@@ -47,15 +47,6 @@ function getEditorSettings(editor): EditorSettings {
     );
   }
 
-  // space_after_content
-  if (typeof editorSettings.space_after_content === 'undefined') {
-    editorSettings.space_after_content = '&nbsp;';
-  } else if (typeof editorSettings.space_after_content !== 'string') {
-    throw new Error(
-      "'space_after_content' property must be a string in answer_editor_config"
-    );
-  }
-
   // btn_cancel_text
   if (typeof editorSettings.btn_cancel_text === 'undefined') {
     editorSettings.btn_cancel_text = 'Cancel';
@@ -67,16 +58,10 @@ function getEditorSettings(editor): EditorSettings {
 
   // btn_ok_text
   if (typeof editorSettings.btn_ok_text === 'undefined') {
-    editorSettings.btn_ok_text = 'Insert';
+    editorSettings.btn_ok_text = 'Update';
   } else if (typeof editorSettings.btn_ok_text !== 'string') {
     throw new Error(
       "'btn_ok_text' property must be a string in answer_editor_config"
-    );
-  }
-
-  if (typeof editorSettings.mathlive_config !== 'object' && typeof editorSettings.mathlive_config !== 'undefined') {
-    throw new Error(
-      "'mathlive_config' property must be a object with config of mathlive, see http://docs.mathlive.io/tutorial-CONFIG.html"
     );
   }
 
@@ -161,7 +146,7 @@ const setup = (editor: Editor, url: string): void => {
 
     setOnClickFillInTheBlankContent(editor);
 
-    fillInTheBlankUpdateCallback(data.key, data.answer, data.scoreWeight);
+    !!fillInTheBlankUpdateCallback && fillInTheBlankUpdateCallback(data.key, data.answer, data.scoreWeight);
   });
 
   editor.on('focus', () => {
