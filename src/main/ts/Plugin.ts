@@ -142,6 +142,15 @@ function getEditorSettings(editor): EditorSettings {
     );
   }
 
+  // title
+  if (typeof editorSettings.space_after_content === 'undefined') {
+    editorSettings.space_after_content = '&nbsp;';
+  } else if (typeof editorSettings.space_after_content !== 'string') {
+    throw new Error(
+      "'space_after_content' property must be a string in answer_editor_config"
+    );
+  }
+
   // btn_cancel_text
   if (typeof editorSettings.btn_cancel_text === 'undefined') {
     editorSettings.btn_cancel_text = 'Cancel';
