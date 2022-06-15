@@ -9,6 +9,8 @@ tinymce.init({
   selector: 'textarea.tinymce',
   plugins: 'code fill-in-the-blank',
   toolbar: 'fill-in-the-blank',
-  // fill_in_the_blank_callback: (id, content) => {
-  // }
+  fill_in_the_blank_callback: (id, content, weights) => {
+    console.log(id);
+  },
+  extended_valid_elements: 'span[class|data-key|data-answer|data-scoreweight|contentEditable|id]',
 });

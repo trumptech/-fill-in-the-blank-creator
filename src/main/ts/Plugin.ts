@@ -140,7 +140,7 @@ const setup = (editor: Editor, url: string): void => {
       blankUnderline += '&nbsp;';
     }
 
-    const content = `<span class="fill-in-the-blank" data-key="${data.key}" data-answer="${data.answer}" data-scoreweight="${data.scoreWeight}" contentEditable="false"><span id="label"></span>&nbsp;<u>${blankUnderline}</u>&nbsp;<span id="score"></span></span>`;
+    const content = `<span class="fill-in-the-blank" data-key="${data.key}" data-answer="${data.answer}" data-scoreweight="${data.scoreWeight}"><span id="label"></span>&nbsp;<u>${blankUnderline}</u>&nbsp;<span id="score"></span></span>`;
 
     editor.selection.setContent(content);
 
@@ -167,6 +167,7 @@ const setOnClickFillInTheBlankContent = (editor: any) => {
 
   // Add onclick listener to all equation content
   for (const fillInTheBlankContent of fillInTheBlankSpan) {
+    fillInTheBlankContent.contentEditable = 'false';
     const key = fillInTheBlankContent.getAttribute('data-key');
     const answer = fillInTheBlankContent.getAttribute('data-answer');
     const scoreWeight = fillInTheBlankContent.getAttribute('data-scoreweight');
