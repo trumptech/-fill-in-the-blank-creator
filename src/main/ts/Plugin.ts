@@ -10,6 +10,101 @@ interface IAnswerData {
   scoreWeight?: number;
 }
 
+const setup = (editor: Editor, url: string): void => {
+  const editorSettings: EditorSettings = getEditorSettings(editor);
+  const settings = editor.settings;
+
+  const fillInTheBlankUpdateCallback = settings.fill_in_the_blank_update_callback;
+
+  // ------ Event ------ //
+  editor.on('focus', () => {
+    setOnClickFillInTheBlankContent(editor);
+  });
+
+  editor.addCommand('answer-update-dialog', (ui: boolean, data: IAnswerData) => {
+    let key = data.key;
+    let answer = data?.answer || '';
+    let scoreWeight = data?.scoreWeight || 0;
+    editor.windowManager.openUrl({
+      url: editorSettings.url,
+      title: editorSettings.title,
+      width: 820,
+      height: 400,
+      buttons: [
+        {
+          type: 'cancel',
+          text: editorSettings.btn_cancel_text,
+        },
+        {
+          type: 'custom',
+          text: editorSettings.btn_ok_text,
+          primary: true,
+        },
+      ],
+      onAction: () => {
+        editor.execCommand('fill-in-the-blank-insert', false, { key, answer, scoreWeight });
+        editor.windowManager.close();
+      },
+      onMessage: (instance, message) => {
+        switch (message.mceAction) {
+          case 'fill-in-the-blank-update':
+            key = message.key;
+            answer = message.answer;
+            scoreWeight = message.scoreWeight;
+            break;
+          case 'fill-in-the-blank-mounted':
+            sendParams(
+              editorSettings,
+              data,
+            );
+            break;
+        }
+      },
+    });
+  });
+
+  editor.addCommand('fill-in-the-blank-insert', (ui: boolean, data: IAnswerData) => {
+    if (!data) {
+      return;
+    }
+
+    let blankUnderline = '';
+    const regex = /<([^>]+)>|&nbsp;|\(|\)/ig;
+    const result = data.answer.replace(regex, '');
+    for (let i = 0; i < Math.max(getLengthInUtf8(result), 25); i++) {
+      blankUnderline += '&nbsp;';
+    }
+
+    // Add span.mq-math-mode
+    const content = `
+            <span class="fill-in-the-blank" data-key="${data.key}" data-answer="${data.answer}" data-scoreweight="${data.scoreWeight}">
+              <span id="label"></span>
+              <u>${blankUnderline}</u>
+              <span id="score"></span>
+            </span>${editorSettings.space_after_content}`;
+
+    editor.selection.setContent(content);
+
+    setOnClickFillInTheBlankContent(editor);
+    !!fillInTheBlankUpdateCallback && fillInTheBlankUpdateCallback(data.key, data.answer, data.scoreWeight);
+  });
+
+  editor.ui.registry.addButton('fill-in-the-blank', {
+    text: 'Add Blank',
+    onAction: () => {
+      const key = uuid.genV4().toString();
+      const regex = /<([^>]+)>|&nbsp;|\(|\)/ig;
+      const answer = editor.selection.getContent().replace(regex, '');
+
+      editor.execCommand('answer-update-dialog', false, { key, answer });
+    },
+  });
+};
+
+export default (): void => {
+  tinymce.PluginManager.add('fill-in-the-blank', setup);
+};
+
 function getEditorSettings(editor): EditorSettings {
   // equation_editor_config
   let editorSettings = editor.settings.answer_editor_config;
@@ -68,92 +163,6 @@ function getEditorSettings(editor): EditorSettings {
   return editorSettings;
 }
 
-const getLengthInUtf8 = (value: string) => {
-  const m = encodeURIComponent(value).match(/%[89ABab]/g);
-  return value.length * 2 + (m ? m.length : 0);
-};
-
-const setup = (editor: Editor, url: string): void => {
-  const editorSettings: EditorSettings = getEditorSettings(editor);
-  const settings = editor.settings;
-
-  const fillInTheBlankUpdateCallback = settings.fill_in_the_blank_update_callback;
-
-  editor.ui.registry.addButton('fill-in-the-blank', {
-    text: 'Add Blank',
-    onAction: () => {
-      const key = uuid.genV4().toString();
-      const regex = /<([^>]+)>|&nbsp;|\(|\)/ig;
-      const answer = editor.selection.getContent().replace(regex, '');
-
-      editor.execCommand('answer-update-dialog', true, { key, answer });
-    },
-  });
-
-  editor.addCommand('answer-update-dialog', (ui: boolean, data: IAnswerData) => {
-    let key = data.key;
-    let answer = data?.answer || '';
-    let scoreWeight = data?.scoreWeight || 0;
-    editor.windowManager.openUrl({
-      url: editorSettings.url,
-      title: editorSettings.title,
-      width: 820,
-      height: 400,
-      buttons: [
-        {
-          type: 'cancel',
-          text: editorSettings.btn_cancel_text,
-        },
-        {
-          type: 'custom',
-          text: editorSettings.btn_ok_text,
-          primary: true,
-        },
-      ],
-      onAction: () => {
-        editor.execCommand('fill-in-the-blank-insert', true, { key, answer, scoreWeight });
-        editor.windowManager.close();
-      },
-      onMessage: (instance, message) => {
-        switch (message.mceAction) {
-          case 'fill-in-the-blank-update':
-            key = message.key;
-            answer = message.answer;
-            scoreWeight = message.scoreWeight;
-            break;
-          case 'fill-in-the-blank-mounted':
-            sendParams(
-              editorSettings,
-              data,
-            );
-            break;
-        }
-      },
-    });
-  });
-
-  editor.addCommand('fill-in-the-blank-insert', (ui: boolean, data: IAnswerData) => {
-    let blankUnderline = '';
-    const regex = /<([^>]+)>|&nbsp;|\(|\)/ig;
-    const result = data.answer.replace(regex, '');
-    for (let i = 0; i < Math.max(getLengthInUtf8(result), 25); i++) {
-      blankUnderline += '&nbsp;';
-    }
-
-    const content = `<span class="fill-in-the-blank" data-key="${data.key}" data-answer="${data.answer}" data-scoreweight="${data.scoreWeight}"><span id="label"></span>&nbsp;<u>${blankUnderline}</u>&nbsp;<span id="score"></span></span>`;
-
-    editor.selection.setContent(content);
-
-    setOnClickFillInTheBlankContent(editor);
-
-    !!fillInTheBlankUpdateCallback && fillInTheBlankUpdateCallback(data.key, data.answer, data.scoreWeight);
-  });
-
-  editor.on('focus', () => {
-    setOnClickFillInTheBlankContent(editor);
-  });
-};
-
 const sendParams = (editorSettings: EditorSettings, data: IAnswerData) => {
   const iframe = document.querySelector("iframe[src='" + editorSettings.url + "']");
 
@@ -181,12 +190,12 @@ const setOnClickFillInTheBlankContent = (editor: any) => {
 
     fillInTheBlankContent.ondblclick = (event) => {
       event.stopPropagation();
-      editor.execCommand('answer-update-dialog', true, { key, answer, scoreWeight });
+      editor.execCommand('answer-update-dialog', false, { key, answer, scoreWeight });
     };
   }
-
 };
 
-export default (): void => {
-  tinymce.PluginManager.add('fill-in-the-blank', setup);
+const getLengthInUtf8 = (value: string) => {
+  const m = encodeURIComponent(value).match(/%[89ABab]/g);
+  return value.length * 2 + (m ? m.length : 0);
 };
