@@ -26,7 +26,6 @@ new Vue({
   watch: {
     form: {
       handler: function (v) {
-        console.log("updating");
         this.sendAnswerData();
       },
       deep: true
@@ -35,14 +34,12 @@ new Vue({
   methods: {
     getParams(evt) {
       let data = evt.data;
-      console.log('received', data);
       this.form.key = data.key;
       this.form.answer = data.answer;
       this.form.scoreWeight = data.scoreWeight;
     },
     sendAnswerData() {
-      console.log('a', window.parent);
-      console.log('this.form', this.form);
+      this.form.scoreWeight = parseInt(this.form.scoreWeight);
       window.parent.postMessage({
         mceAction: 'fill-in-the-blank-update',
         key: this.form.key,

@@ -69,9 +69,7 @@ const setup = (editor: Editor, url: string): void => {
     }
 
     let blankUnderline = '';
-    const regex = /<([^>]+)>|&nbsp;|\(|\)/ig;
-    const result = data.answer.replace(regex, '');
-    for (let i = 0; i < Math.max(getLengthInUtf8(result), 25); i++) {
+    for (let i = 0; i < Math.min(getLengthInUtf8(data.answer), 25); i++) {
       blankUnderline += '&nbsp;';
     }
 
@@ -135,7 +133,7 @@ function getEditorSettings(editor): EditorSettings {
 
   // title
   if (typeof editorSettings.title === 'undefined') {
-    editorSettings.title = 'Answer Editor';
+    editorSettings.title = '';
   } else if (typeof editorSettings.title !== 'string') {
     throw new Error(
       "'title' property must be a string in answer_editor_config"
@@ -162,7 +160,7 @@ function getEditorSettings(editor): EditorSettings {
 
   // btn_ok_text
   if (typeof editorSettings.btn_ok_text === 'undefined') {
-    editorSettings.btn_ok_text = 'Update';
+    editorSettings.btn_ok_text = 'Submit';
   } else if (typeof editorSettings.btn_ok_text !== 'string') {
     throw new Error(
       "'btn_ok_text' property must be a string in answer_editor_config"

@@ -1,0 +1,17 @@
+﻿.formContainer {
+  margin-top: 20px;
+}
+
+.form-label {
+  color: #5378A7;
+  font: normal normal normal 14px/16px Helvetica Neue;
+}
+
+.form-control {
+  border: 1px solid #A9B8CE;
+  border-radius: 0px;
+}
+
+.title {
+  font: normal normal bold 20px/25px Helvetica Neue;
+}

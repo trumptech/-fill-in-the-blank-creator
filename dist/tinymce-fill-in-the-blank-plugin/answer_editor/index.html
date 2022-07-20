@@ -5,18 +5,24 @@
   <title>Answer Editor</title>
   <!-- dev script -->
   <script src="js/vue.global.prod.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
   <!-- use this in production -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 </head>
 
 <body>
   <div id="app" class="container">
-    <form>
-      <div class="col-1">
-        <input v-model="form.answer" placeholder="edit me" />
+    <span class="title">Fill in the blank</span>
+    <form class="formContainer">
+      <div class="mb-3">
+        <label for="answer" class="form-label">Answer</label>
+        <input type="text" class="form-control" id="answer" v-model="form.answer" placeholder="" />
       </div>
-      <div class="col-2">
-        <input v-model="form.scoreWeight" placeholder="edit me" />
+      <div class="mb-3">
+        <label for="scoreWeight" class="form-label">Score Weight</label>
+        <input type="number" min="0" class="form-control" id="scoreWeight" v-model="form.scoreWeight" placeholder="" />
       </div>
     </form>
   </div>
